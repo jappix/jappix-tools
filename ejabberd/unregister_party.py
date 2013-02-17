@@ -1,8 +1,8 @@
 # ejabberd
 # Unregister Party
 # 
-# Purpose: remove accounts matching a given regular expression
-# Author: Valérian Saliou
+# Purpose: Removes accounts matching a given regular expression
+# Author: Valerian Saliou
 # 
 # Project: Jappix
 # License: GPL
