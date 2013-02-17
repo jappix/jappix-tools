@@ -3,6 +3,8 @@
 # 
 # Purpose: Removes accounts matching a given regular expression
 # Author: Valerian Saliou
+# XMPP: valerian@jappix.com
+# Website: http://valeriansaliou.name/
 # 
 # Project: Jappix
 # License: GPL
