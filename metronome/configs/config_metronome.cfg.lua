@@ -106,11 +106,8 @@ disco_items = {
 
 -- BOSH configuration (mod_bosh)
 bosh_max_inactivity = 30
-consider_bosh_secure = true
+--consider_bosh_secure = true
 cross_domain_bosh = true
-
--- Stanza counter configuration (mod_stanza_counter)
---stanza_counter_basepath = "/stats/stanza"
 
 -- Server status configuration (mod_server_status)
 --server_status_basepath = "/stats/server"
