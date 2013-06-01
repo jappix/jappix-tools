@@ -1,0 +1,58 @@
+#! /bin/sh
+#
+# metronome        Start/stop metronome server
+#
+
+### BEGIN INIT INFO
+# Provides:          metronome
+# Required-Start:    $remote_fs $network $named $time
+# Required-Stop:     $remote_fs $network $named $time
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts metronome server
+# Description:       Starts metronome server, an XMPP server written in Lua.
+### END INIT INFO
+
+METRONOME=/usr/local/bin/metronomectl
+PIDDIR=/var/run/metronome
+NAME=metronome
+
+test -e $METRONOME || exit 0
+
+start()
+{
+	mkdir $PIDDIR
+	chown metronome:metronome $PIDDIR
+	chmod 750 $PIDDIR
+	
+    $METRONOME start >> /dev/null
+}
+
+stop()
+{
+    $METRONOME stop >> /dev/null
+}
+
+case "$1" in
+    start)
+	echo -n "Starting Metronome..."
+	start &
+    ;;
+    stop)
+	echo -n "Stopping Metronome..."
+	stop &
+    ;;
+    *)
+	echo "Usage: $0 {start|stop}" >&2
+	exit 1
+    ;;
+esac
+
+if [ $? -eq 0 ]; then
+    echo .
+else
+    echo " failed!"
+fi
+
+exit 0
+
