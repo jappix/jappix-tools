@@ -19,7 +19,8 @@
 -- This is a (by default, empty) list of accounts that are admins
 -- for the server. Note that you must create the accounts separately
 -- (see http://prosody.im/doc/creating_accounts for info)
-admins = { "valerian@jappix.com", "julien@jappix.com" }
+-- Example: admins = { "user1@example.com", "user2@example.net" }
+admins = { }
 
 -- Server PID
 pidfile = "/var/run/metronome/metronome.pid"
@@ -28,9 +29,12 @@ pidfile = "/var/run/metronome/metronome.pid"
 metronome_max_files_soft = 200000
 metronome_max_files_hard = 200000
 
--- HTTP ports
+-- HTTP server
 http_ports = { 5290 }
-https_ports = { 5291 }
+http_interfaces = { "127.0.0.1", "::1" }
+
+--https_ports = { 5291 }
+--https_interfaces = { "127.0.0.1", "::1" }
 
 -- Enable use of libevent for better performance under high load
 -- For more information see: http://prosody.im/doc/libevent
@@ -72,7 +76,7 @@ modules_enabled = {
 		"admin_telnet"; -- Opens telnet console interface on localhost port 5582
 	
 	-- HTTP modules
-		"bosh"; -- Enable BOSH clients, aka "Jabber over HTTP"
+		--"bosh"; -- Enable BOSH clients, aka "Jabber over HTTP"
 		--"http_files"; -- Serve static files from a directory over HTTP
 
 	-- Other specific functionality
@@ -83,10 +87,6 @@ modules_enabled = {
 		--"watchregistrations"; -- Alert admins of registrations
 		--"motd"; -- Send a message to users when they log in
 		--"legacyauth"; -- Legacy authentication. Only used by some old clients and bots.
-
-	-- Third-party plugins
-		--"stanza_counter"; -- Provides stats on exchanged stanzas
-		--"server_status"; -- Provide host-based stats
 };
 
 -- These modules are auto-loaded, but should you want
@@ -105,14 +105,9 @@ disco_items = {
 };
 
 -- BOSH configuration (mod_bosh)
-bosh_max_inactivity = 30
+--bosh_max_inactivity = 30
 --consider_bosh_secure = true
-cross_domain_bosh = true
-
--- Server status configuration (mod_server_status)
---server_status_basepath = "/stats/server"
---server_status_show_hosts = { "jappix.com", "anonymous.jappix.com" }
---server_status_show_comps = { "bind.jappix.com", "muc.jappix.com", "pubsub.jappix.com", "vjud.jappix.com" }
+--cross_domain_bosh = true
 
 -- Disable account creation by default, for security
 -- For more information see http://prosody.im/doc/creating_accounts
@@ -202,7 +197,7 @@ VirtualHost "jappix.com"
 			"register_redirect"; -- Redirects users registering to the registration form
 
 		-- Admin interfaces
-			"admin_adhoc"; -- Allows administration via an XMPP client that supports ad-hoc commands
+			--"admin_adhoc"; -- Allows administration via an XMPP client that supports ad-hoc commands
 	};
 
 	no_registration_whitelist = true
@@ -230,20 +225,22 @@ Component "muc.jappix.com" "muc"
 
 	modules_enabled = {
 		"muc_limits";
-		"muc_log";
-		"muc_log_http";
+		--"muc_log";
+		--"muc_log_http";
 		"pastebin";
 	}
 
 	muc_event_rate = 0.5
 	muc_burst_factor = 10
 
-	muc_log_http = {
-		http_port = 5290;
-		show_join = true;
-		show_status = false;
-		theme = "metronome";
-	}
+	--muc_log_presences = false
+
+	--muc_log_http = {
+		--http_port = 5290;
+		--show_join = true;
+		--show_status = false;
+		--theme = "metronome";
+	--}
 
 	pastebin_url = "https://muc.jappix.com/paste/"
 	pastebin_expire_after = 0
@@ -253,18 +250,28 @@ Component "muc.jappix.com" "muc"
 Component "pubsub.jappix.com" "pubsub"
 	name = "Jappix Publish/Subscribe"
 
-	unrestricted_node_creation = true -- Anyone can create a PubSub node (from any server)
+	--unrestricted_node_creation = true -- Anyone can create a PubSub node (from any server)
 
 ---Set up a VJUD service
 Component "vjud.jappix.com" "vjud"
 	ud_disco_name = "Jappix User Directory"
 
----Set up a BOSH service
-Component "bind.jappix.com" "http"
-	modules_enabled = { "bosh" }
+	synchronize_to_host_vcards = "jappix.com"
 
-Component "me.jappix.com" "http"
-	modules_enabled = { "bosh" }
+---Set up a BOSH service
+--Component "bind.jappix.com" "http"
+	--modules_enabled = { "bosh" }
+
+--Component "me.jappix.com" "http"
+	--modules_enabled = { "bosh" }
+
+---Set up a statistics service
+Component "stats.jappix.com" "http"
+	modules_enabled = { "server_status" }
+
+	server_status_basepath = "/xmppd/"
+	server_status_show_hosts = { "jappix.com", "anonymous.jappix.com" }
+	server_status_show_comps = { "muc.jappix.com", "pubsub.jappix.com", "vjud.jappix.com" }
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 --Component "proxy.example.com" "proxy65"

@@ -1,0 +1,66 @@
+#! /bin/sh
+#
+# bosh        Start/stop node-xmpp-bosh server
+#
+
+### BEGIN INIT INFO
+# Provides:          bosh
+# Required-Start:    $remote_fs $network $named $time
+# Required-Stop:     $remote_fs $network $named $time
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts node-xmpp-bosh server
+# Description:       Starts node-xmpp-bosh server, an XMPP
+#                    BOSH server written in JavaScript.
+### END INIT INFO
+
+BOSH=/usr/local/lib/node_modules/node-xmpp-bosh/run-server.js
+ARGS=--config=/etc/bosh.conf.js
+#LOG=/var/log/bosh/bosh.log
+LOG=/dev/null
+ERROR=/var/log/bosh/bosh.err
+NAME=run-server.js
+
+test -e $BOSH || exit 0
+
+start()
+{
+    if ! pgrep -f $NAME
+    then
+    	su - node -c "${BOSH} ${ARGS} ${@} >> ${LOG} 2>> ${ERROR} &"
+    fi
+}
+
+stop()
+{
+    killall node
+}
+
+case "$1" in
+    start)
+	echo -n "Starting BOSH server..."
+	start &
+    ;;
+    stop)
+	echo -n "Stopping BOSH server..."
+	stop &
+    ;;
+    restart)
+	echo -n "Restarting BOSH server..."
+	$0 stop
+	$0 start
+    ;;
+    *)
+	echo "Usage: $0 {start|stop|restart}" >&2
+	exit 1
+    ;;
+esac
+
+if [ $? -eq 0 ]; then
+    echo .
+else
+    echo " failed!"
+fi
+
+exit 0
+
