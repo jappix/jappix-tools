@@ -21,7 +21,7 @@ test -e $METRONOME || exit 0
 
 start()
 {
-	mkdir $PIDDIR
+	mkdir $PIDDIR -p
 	chown metronome:metronome $PIDDIR
 	chmod 750 $PIDDIR
 	
