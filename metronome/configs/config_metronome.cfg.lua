@@ -55,6 +55,7 @@ modules_enabled = {
 		"dialback"; -- s2s dialback support
 		"disco"; -- Service discovery
 		"discoitems"; -- Service discovery items
+		"extdisco"; -- External Service Discovery
 
 	-- Not essential, but recommended
 		--"private"; -- Private XML storage (for room bookmarks, etc.)
@@ -100,8 +101,18 @@ modules_disabled = {
 -- Discovery items
 disco_items = {
 	{ "muc.jappix.com" },
-	{ "vjud.jappix.com" },
-	{ "pubsub.jappix.com" }
+	{ "proxy.jappix.com" },
+	{ "pubsub.jappix.com" },
+	{ "vjud.jappix.com" }
+};
+
+-- External Service Discovery (mod_extdisco)
+external_services = {
+	["stun.jappix.com"] = {
+		port = "3478",
+		transport = "udp",
+		type = "stun"
+	}
 };
 
 -- BOSH configuration (mod_bosh)
@@ -189,9 +200,11 @@ VirtualHost "jappix.com"
 			"vcard"; -- Allow users to set vCards
 		
 		-- These are commented by default as they have a performance impact
+			"mam"; -- Message Archive Management
 			"privacy"; -- Support privacy lists
 
 		-- Nice to have
+			"lastactivity"; -- Logs the user last activity timestamp
 			"pep"; -- Enables users to publish their mood, activity, playing music and more
 			"register"; -- Allow users to register on this server using a client and change passwords
 			"register_redirect"; -- Redirects users registering to the registration form
@@ -199,6 +212,8 @@ VirtualHost "jappix.com"
 		-- Admin interfaces
 			--"admin_adhoc"; -- Allows administration via an XMPP client that supports ad-hoc commands
 	};
+
+	mam_stores_cap = 20000
 
 	no_registration_whitelist = true
 	registration_url = "https://jappix.com/"
@@ -211,7 +226,7 @@ VirtualHost "anonymous.jappix.com"
 	allow_anonymous_multiresourcing = true
 	allow_anonymous_s2s = true
 	anonymous_jid_gentoken = "Jappix Anonymous User"
-	anonymous_randomize_for_loopback = true
+	anonymous_randomize_for_trusted_addresses = { "127.0.0.1", "95.142.175.37", "::1", "2001:4b98:dc0:51:216:3eff:fe5d:90a1" }
 
 
 ------ Components ------
@@ -274,7 +289,8 @@ Component "stats.jappix.com" "http"
 	server_status_show_comps = { "muc.jappix.com", "pubsub.jappix.com", "vjud.jappix.com" }
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
---Component "proxy.example.com" "proxy65"
+Component "proxy.jappix.com" "proxy65"
+	proxy65_acl = { "jappix.com", "anonymous.jappix.com" }
 
 ---Set up an external component (default component port is 5347)
 --
