@@ -286,7 +286,7 @@ Component "stats.jappix.com" "http"
 
 	server_status_basepath = "/xmppd/"
 	server_status_show_hosts = { "jappix.com", "anonymous.jappix.com" }
-	server_status_show_comps = { "muc.jappix.com", "pubsub.jappix.com", "vjud.jappix.com" }
+	server_status_show_comps = { "muc.jappix.com", "proxy.jappix.com", "pubsub.jappix.com", "vjud.jappix.com" }
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 Component "proxy.jappix.com" "proxy65"
