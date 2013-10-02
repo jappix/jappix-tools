@@ -30,10 +30,10 @@ metronome_max_files_soft = 200000
 metronome_max_files_hard = 200000
 
 -- HTTP server
-http_ports = { 5290 }
+http_ports = { 5280 }
 http_interfaces = { "127.0.0.1", "::1" }
 
---https_ports = { 5291 }
+--https_ports = { 5281 }
 --https_interfaces = { "127.0.0.1", "::1" }
 
 -- Enable use of libevent for better performance under high load
@@ -77,7 +77,7 @@ modules_enabled = {
 		"admin_telnet"; -- Opens telnet console interface on localhost port 5582
 	
 	-- HTTP modules
-		--"bosh"; -- Enable BOSH clients, aka "Jabber over HTTP"
+		"bosh"; -- Enable BOSH clients, aka "Jabber over HTTP"
 		--"http_files"; -- Serve static files from a directory over HTTP
 
 	-- Other specific functionality
@@ -116,9 +116,9 @@ external_services = {
 };
 
 -- BOSH configuration (mod_bosh)
---bosh_max_inactivity = 30
---consider_bosh_secure = true
---cross_domain_bosh = true
+bosh_max_inactivity = 30
+consider_bosh_secure = true
+cross_domain_bosh = true
 
 -- Disable account creation by default, for security
 -- For more information see http://prosody.im/doc/creating_accounts
@@ -208,6 +208,7 @@ VirtualHost "jappix.com"
 			"pep"; -- Enables users to publish their mood, activity, playing music and more
 			"register"; -- Allow users to register on this server using a client and change passwords
 			"register_redirect"; -- Redirects users registering to the registration form
+			"public_service"; -- Provides some information about the XMPP server
 
 		-- Admin interfaces
 			--"admin_adhoc"; -- Allows administration via an XMPP client that supports ad-hoc commands
@@ -219,6 +220,18 @@ VirtualHost "jappix.com"
 	registration_url = "https://jappix.com/"
 	registration_text = "Please register your account on Jappix itself (open Jappix.com in your Web browser). Then you'll be able to use it anywhere you want."
 
+	public_service_vcard = {
+		name = "Jappix XMPP service",
+		url = "https://jappix.com/",
+		foundation_year = "2010",
+		country = "FR",
+		email = "valerian@jappix.com",
+		admin_jid = "valerian@jappix.com",
+		geo = "48.87,2.33",
+		ca = { name = "Gandi", url = "https://www.gandi.net/ssl" },
+		oob_registration_uri = "https://jappix.com/"
+	}
+
 
 VirtualHost "anonymous.jappix.com"
 	enabled = true
@@ -226,7 +239,7 @@ VirtualHost "anonymous.jappix.com"
 	allow_anonymous_multiresourcing = true
 	allow_anonymous_s2s = true
 	anonymous_jid_gentoken = "Jappix Anonymous User"
-	anonymous_randomize_for_trusted_addresses = { "127.0.0.1", "95.142.175.37", "::1", "2001:4b98:dc0:51:216:3eff:fe5d:90a1" }
+	anonymous_randomize_for_trusted_addresses = { "127.0.0.1", "::1" }
 
 
 ------ Components ------
@@ -251,7 +264,7 @@ Component "muc.jappix.com" "muc"
 	--muc_log_presences = false
 
 	--muc_log_http = {
-		--http_port = 5290;
+		--http_port = 5280;
 		--show_join = true;
 		--show_status = false;
 		--theme = "metronome";
@@ -274,11 +287,11 @@ Component "vjud.jappix.com" "vjud"
 	synchronize_to_host_vcards = "jappix.com"
 
 ---Set up a BOSH service
---Component "bind.jappix.com" "http"
-	--modules_enabled = { "bosh" }
+Component "bind.jappix.com" "http"
+	modules_enabled = { "bosh" }
 
---Component "me.jappix.com" "http"
-	--modules_enabled = { "bosh" }
+Component "me.jappix.com" "http"
+	modules_enabled = { "bosh" }
 
 ---Set up a statistics service
 Component "stats.jappix.com" "http"
