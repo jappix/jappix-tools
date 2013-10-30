@@ -19,7 +19,7 @@
 -- This is a (by default, empty) list of accounts that are admins
 -- for the server. Note that you must create the accounts separately
 -- (see http://prosody.im/doc/creating_accounts for info)
--- Example: admins = { "user1@example.com", "user2@example.net" }
+-- Example: admins = { "valerian@jappix.com", "julien@jappix.com" }
 admins = { }
 
 -- Server PID
@@ -62,7 +62,7 @@ modules_enabled = {
 		--"vcard"; -- Allow users to set vCards
 	
 	-- These are commented by default as they have a performance impact
-		--"compression"; -- Stream compression
+		"compression"; -- Stream compression
 
 	-- Nice to have
 		"version"; -- Replies to server version requests
@@ -136,23 +136,14 @@ ssl = {
 
 c2s_require_encryption = false
 
--- Force certificate authentication for server-to-server connections?
--- This provides ideal security, but requires servers you communicate
--- with to support encryption AND present valid, trusted certificates.
--- For more information see http://prosody.im/doc/s2s#security
+-- Force servers to use encrypted connections? This option will
+-- prevent servers from connecting unless they are using encryption.
 
-s2s_secure = true
+s2s_require_encryption = false
 
--- Many servers don't support encryption or have invalid or self-signed
--- certificates. You can list domains here that will not be required to
--- authenticate using certificates. They will be authenticated using DNS.
+-- Allow servers to use an unauthenticated encryption channel
 
--- s2s_insecure_domains = { "gmail.com" }
-
--- Even if you leave s2s_secure disabled, you can still require it for
--- some domains by specifying a list here.
-
--- s2s_secure_domains = { "jabber.org" }
+s2s_allow_encryption = true
 
 -- Select the authentication backend to use. The 'internal' providers
 -- use Metronome's configured data storage to store the authentication data.
@@ -162,18 +153,6 @@ s2s_secure = true
 -- for information about using the hashed backend.
 
 authentication = "internal_plain"
-
--- Select the storage backend to use. By default Metronome uses flat files
--- in its configured data directory, but it also supports more backends
--- through modules. An "sql" backend is included by default, but requires
--- additional dependencies. See http://prosody.im/doc/storage for more info.
-
---storage = "sql" -- Default is "internal"
-
--- For the "sql" backend, you can uncomment *one* of the below to configure:
---sql = { driver = "SQLite3", database = "prosody.sqlite" } -- Default. 'database' is the filename.
---sql = { driver = "MySQL", database = "prosody", username = "prosody", password = "secret", host = "localhost" }
---sql = { driver = "PostgreSQL", database = "prosody", username = "prosody", password = "secret", host = "localhost" }
 
 -- Logging configuration
 -- For advanced logging see http://prosody.im/doc/logging
@@ -228,7 +207,7 @@ VirtualHost "jappix.com"
 		email = "valerian@jappix.com",
 		admin_jid = "valerian@jappix.com",
 		geo = "48.87,2.33",
-		ca = { name = "Gandi", url = "https://www.gandi.net/ssl" },
+		ca = { name = "StartSSL", url = "https://www.startssl.com/" },
 		oob_registration_uri = "https://jappix.com/"
 	}
 
@@ -304,12 +283,3 @@ Component "stats.jappix.com" "http"
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 Component "proxy.jappix.com" "proxy65"
 	proxy65_acl = { "jappix.com", "anonymous.jappix.com" }
-
----Set up an external component (default component port is 5347)
---
--- External components allow adding various services, such as gateways/
--- transports to other networks like ICQ, MSN and Yahoo. For more info
--- see: http://prosody.im/doc/components#adding_an_external_component
---
---Component "gateway.example.com"
---	component_secret = "password"
