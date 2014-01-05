@@ -109,9 +109,17 @@ disco_items = {
 -- External Service Discovery (mod_extdisco)
 external_services = {
     ["stun.jappix.com"] = {
-        port = "3478",
-        transport = "udp",
-        type = "stun"
+        [1] = {
+            port = "3478",
+            transport = "udp",
+            type = "stun"
+        },
+
+        [2] = {
+            port = "3478",
+            transport = "tcp",
+            type = "stun"
+        }
     }
 };
 
@@ -134,7 +142,7 @@ ssl = {
 -- Force clients to use encrypted connections? This option will
 -- prevent clients from authenticating unless they are using encryption.
 
-c2s_require_encryption = false
+c2s_require_encryption = true
 
 -- Force servers to use encrypted connections? This option will
 -- prevent servers from connecting unless they are using encryption.
