@@ -78,6 +78,7 @@ modules_enabled = {
     
     -- HTTP modules
         "bosh"; -- Enable BOSH clients, aka "Jabber over HTTP"
+        "websocket"; -- Enable WebSocket clients
         --"http_files"; -- Serve static files from a directory over HTTP
 
     -- Other specific functionality
@@ -127,6 +128,10 @@ external_services = {
 bosh_max_inactivity = 30
 consider_bosh_secure = true
 cross_domain_bosh = true
+
+-- WebSocket configuration (mod_websocket)
+consider_websocket_secure = true
+cross_domain_websocket = true
 
 -- Disable account creation by default, for security
 -- For more information see http://prosody.im/doc/creating_accounts
@@ -275,8 +280,13 @@ Component "vjud.jappix.com" "vjud"
 Component "bind.jappix.com" "http"
     modules_enabled = { "bosh" }
 
+---Set up a WebSocket service
+Component "websocket.jappix.com" "http"
+    modules_enabled = { "websocket" }
+
+---Set up a BOSH + WebSocket service
 Component "me.jappix.com" "http"
-    modules_enabled = { "bosh" }
+    modules_enabled = { "bosh", "websocket" }
 
 ---Set up a statistics service
 Component "stats.jappix.com" "http"
