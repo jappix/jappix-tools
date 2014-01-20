@@ -1,10 +1,10 @@
 -- Metronome Configuration File
 --
 -- Information on configuring Metronome can be found on our
--- website at http://prosody.im/doc/configure
+-- website at http://www.lightwitch.org/metronome/documentation
 --
 -- Tip: You can check that the syntax of this file is correct
--- when you have finished by running: luac -p prosody.cfg.lua
+-- when you have finished by running: luac -p metronome.cfg.lua
 -- If there are any errors, it will let you know what and where
 -- they are, otherwise it will keep quiet.
 --
@@ -18,7 +18,6 @@
 
 -- This is a (by default, empty) list of accounts that are admins
 -- for the server. Note that you must create the accounts separately
--- (see http://prosody.im/doc/creating_accounts for info)
 -- Example: admins = { "valerian@jappix.com", "julien@jappix.com" }
 admins = { }
 
@@ -36,16 +35,11 @@ http_interfaces = { "127.0.0.1", "::1" }
 --https_ports = { 5281 }
 --https_interfaces = { "127.0.0.1", "::1" }
 
--- Enable use of libevent for better performance under high load
--- For more information see: http://prosody.im/doc/libevent
-use_libevent = true;
-
 -- Enable IPv6
 use_ipv6 = true;
 
 -- This is the list of modules Metronome will load on startup.
 -- It looks for mod_modulename.lua in the plugins folder, so make sure that exists too.
--- Documentation on modules can be found at: http://prosody.im/doc/modules
 modules_enabled = {
 
     -- Generally required
@@ -134,7 +128,6 @@ consider_websockets_secure = true
 cross_domain_websockets = true
 
 -- Disable account creation by default, for security
--- For more information see http://prosody.im/doc/creating_accounts
 allow_registration = false;
 
 -- These are the SSL/TLS-related settings. If you don't want
@@ -162,13 +155,12 @@ s2s_allow_encryption = true
 -- use Metronome's configured data storage to store the authentication data.
 -- To allow Metronome to offer secure authentication mechanisms to clients, the
 -- default provider stores passwords in plaintext. If you do not trust your
--- server please see http://prosody.im/doc/modules/mod_auth_internal_hashed
--- for information about using the hashed backend.
+-- server please use internal_hashed below, to note that this will disable
+-- DIGEST-MD5 as SASL mechanism.
 
 authentication = "internal_plain"
 
 -- Logging configuration
--- For advanced logging see http://prosody.im/doc/logging
 log = {
     --info = "/var/log/metronome/metronome.log"; -- Change 'info' to 'debug' for verbose logging
     error = "/var/log/metronome/metronome.err";
@@ -238,7 +230,6 @@ VirtualHost "anonymous.jappix.com"
 ------ Components ------
 -- You can specify components to add hosts that provide special services,
 -- like multi-user conferences, and transports.
--- For more information on components, see http://prosody.im/doc/components
 
 ---Set up a MUC (multi-user chat) room server on muc.jappix.com:
 Component "muc.jappix.com" "muc"
