@@ -36,7 +36,7 @@ http_interfaces = { "127.0.0.1", "::1" }
 --https_interfaces = { "127.0.0.1", "::1" }
 
 -- Enable IPv6
-use_ipv6 = true;
+use_ipv6 = true
 
 -- This is the list of modules Metronome will load on startup.
 -- It looks for mod_modulename.lua in the plugins folder, so make sure that exists too.
@@ -77,6 +77,7 @@ modules_enabled = {
 
     -- Other specific functionality
         "posix"; -- POSIX functionality, sends server to background, enables syslog, etc.
+        "bidi"; -- Bidirectional Streams for S2S connections
         --"groups"; -- Shared roster support
         --"announce"; -- Send announcement to all online users
         --"welcome"; -- Welcome users who register accounts
@@ -118,6 +119,9 @@ external_services = {
     }
 };
 
+-- Bidirectional Streams configuration (mod_bidi)
+bidi_exclusion_list = { "jabber.org" }
+
 -- BOSH configuration (mod_bosh)
 bosh_max_inactivity = 30
 consider_bosh_secure = true
@@ -128,7 +132,7 @@ consider_websockets_secure = true
 cross_domain_websockets = true
 
 -- Disable account creation by default, for security
-allow_registration = false;
+allow_registration = false
 
 -- These are the SSL/TLS-related settings. If you don't want
 -- to use SSL/TLS, you may comment or remove this
@@ -197,7 +201,7 @@ VirtualHost "jappix.com"
 
         -- Admin interfaces
             --"admin_adhoc"; -- Allows administration via an XMPP client that supports ad-hoc commands
-    };
+    }
 
     mam_stores_cap = 20000
 
