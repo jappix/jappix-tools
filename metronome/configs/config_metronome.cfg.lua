@@ -78,6 +78,7 @@ modules_enabled = {
     -- Other specific functionality
         "posix"; -- POSIX functionality, sends server to background, enables syslog, etc.
         "bidi"; -- Bidirectional Streams for S2S connections
+        "stream_management"; -- Stream Management support
         --"groups"; -- Shared roster support
         --"announce"; -- Send announcement to all online users
         --"welcome"; -- Welcome users who register accounts
@@ -149,7 +150,7 @@ c2s_require_encryption = true
 -- Force servers to use encrypted connections? This option will
 -- prevent servers from connecting unless they are using encryption.
 
-s2s_require_encryption = false
+s2s_require_encryption = true
 
 -- Allow servers to use an unauthenticated encryption channel
 
