@@ -204,7 +204,7 @@ VirtualHost "jappix.com"
             --"admin_adhoc"; -- Allows administration via an XMPP client that supports ad-hoc commands
     }
 
-    mam_stores_cap = 20000
+    mam_stores_cap = 1000
 
     no_registration_whitelist = true
     registration_url = "https://jappix.com/"
