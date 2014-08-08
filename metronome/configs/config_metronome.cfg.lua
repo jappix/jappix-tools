@@ -54,7 +54,7 @@ modules_enabled = {
     -- Not essential, but recommended
         --"private"; -- Private XML storage (for room bookmarks, etc.)
         --"vcard"; -- Allow users to set vCards
-    
+
     -- These are commented by default as they have a performance impact
         "compression"; -- Stream compression
 
@@ -69,7 +69,7 @@ modules_enabled = {
     -- Admin interfaces
         --"admin_adhoc"; -- Allows administration via an XMPP client that supports ad-hoc commands
         "admin_telnet"; -- Opens telnet console interface on localhost port 5582
-    
+
     -- HTTP modules
         "bosh"; -- Enable BOSH clients, aka "Jabber over HTTP"
         "websockets"; -- Enable WebSocket clients
@@ -156,6 +156,12 @@ s2s_require_encryption = true
 
 s2s_allow_encryption = true
 
+-- Don't require encryption for listed servers
+s2s_encryption_exceptions = {
+    "cisco.com",
+    "gmail.com"
+}
+
 -- Select the authentication backend to use. The 'internal' providers
 -- use Metronome's configured data storage to store the authentication data.
 -- To allow Metronome to offer secure authentication mechanisms to clients, the
@@ -187,7 +193,7 @@ VirtualHost "jappix.com"
         -- Not essential, but recommended
             "private"; -- Private XML storage (for room bookmarks, etc.)
             "vcard"; -- Allow users to set vCards
-        
+
         -- These are commented by default as they have a performance impact
             "mam"; -- Message Archive Management
             "privacy"; -- Support privacy lists
@@ -205,6 +211,7 @@ VirtualHost "jappix.com"
     }
 
     mam_stores_cap = 1000
+    resources_limit = 10
 
     no_registration_whitelist = true
     registration_url = "https://jappix.com/"
@@ -291,6 +298,10 @@ Component "stats.jappix.com" "http"
     server_status_basepath = "/xmppd/"
     server_status_show_hosts = { "jappix.com", "anonymous.jappix.com" }
     server_status_show_comps = { "muc.jappix.com", "proxy.jappix.com", "pubsub.jappix.com", "vjud.jappix.com" }
+
+---Set up an API service
+Component "api.jappix.com" "http"
+    modules_enabled = { "api_user", "api_muc" }
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 Component "proxy.jappix.com" "proxy65"
