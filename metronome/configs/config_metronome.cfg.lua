@@ -169,7 +169,7 @@ s2s_encryption_exceptions = {
 -- server please use internal_hashed below, to note that this will disable
 -- DIGEST-MD5 as SASL mechanism.
 
-authentication = "internal_plain"
+authentication = "internal_hashed"
 
 -- Logging configuration
 log = {
