@@ -162,15 +162,6 @@ s2s_encryption_exceptions = {
     "gmail.com"
 }
 
--- Select the authentication backend to use. The 'internal' providers
--- use Metronome's configured data storage to store the authentication data.
--- To allow Metronome to offer secure authentication mechanisms to clients, the
--- default provider stores passwords in plaintext. If you do not trust your
--- server please use internal_hashed below, to note that this will disable
--- DIGEST-MD5 as SASL mechanism.
-
-authentication = "internal_hashed"
-
 -- Logging configuration
 log = {
     --info = "/var/log/metronome/metronome.log"; -- Change 'info' to 'debug' for verbose logging
@@ -185,6 +176,7 @@ log = {
 
 VirtualHost "jappix.com"
     enabled = true
+    authentication = "internal_hashed"
 
     modules_enabled = {
         -- Generally required
