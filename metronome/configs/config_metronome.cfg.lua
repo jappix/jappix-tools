@@ -11,6 +11,8 @@
 -- The only thing left to do is rename this file to remove the .dist ending, and fill in the
 -- blanks. Good luck, and happy Jabbering!
 
+-- Important: some modules in use there were fetched from https://github.com/jappix/jappix-xmppd-modules
+
 
 ---------- Server-wide settings ----------
 -- Settings in this section apply to the whole server and are the default settings
@@ -164,11 +166,13 @@ s2s_encryption_exceptions = {
 
 -- Logging configuration
 log = {
-    --info = "/var/log/metronome/metronome.log"; -- Change 'info' to 'debug' for verbose logging
+    -- info = "/var/log/metronome/metronome.log"; -- Change 'info' to 'debug' for verbose logging
     error = "/var/log/metronome/metronome.err";
     -- "*syslog"; -- Uncomment this for logging to syslog
     -- "*console"; -- Log to the console, useful for debugging with daemonize=false
 }
+
+activity_log_dir = "/var/log/metronome/activity_log"
 
 ----------- Virtual hosts -----------
 -- You need to add a VirtualHost entry for each domain you wish Metronome to serve.
@@ -197,6 +201,7 @@ VirtualHost "jappix.com"
             "register"; -- Allow users to register on this server using a client and change passwords
             "register_redirect"; -- Redirects users registering to the registration form
             "public_service"; -- Provides some information about the XMPP server
+            "log_activity"; -- Activity log, module from https://github.com/jappix/jappix-xmppd-modules
 
         -- Admin interfaces
             --"admin_adhoc"; -- Allows administration via an XMPP client that supports ad-hoc commands
@@ -292,6 +297,7 @@ Component "stats.jappix.com" "http"
     server_status_show_comps = { "muc.jappix.com", "proxy.jappix.com", "pubsub.jappix.com", "vjud.jappix.com" }
 
 ---Set up an API service
+-- Important: uses modules from https://github.com/jappix/jappix-xmppd-modules
 Component "api.jappix.com" "http"
     modules_enabled = { "api_user", "api_muc" }
 
