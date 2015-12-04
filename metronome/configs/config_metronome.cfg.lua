@@ -11,8 +11,6 @@
 -- The only thing left to do is rename this file to remove the .dist ending, and fill in the
 -- blanks. Good luck, and happy Jabbering!
 
--- Important: some modules in use there were fetched from https://github.com/jappix/jappix-xmppd-modules
-
 
 ---------- Server-wide settings ----------
 -- Settings in this section apply to the whole server and are the default settings
@@ -134,8 +132,10 @@ cross_domain_bosh = true
 consider_websockets_secure = true
 cross_domain_websockets = true
 
--- Disable account creation by default, for security
-allow_registration = false
+-- Allow account creation by default
+-- You may want to disable this for security, and use Jappix CAPTCHA registration instead
+-- If so, uncomment `registration_url` and `registration_text` and configure Jappix script registration feature
+allow_registration = true
 
 -- These are the SSL/TLS-related settings. If you don't want
 -- to use SSL/TLS, you may comment or remove this
@@ -208,8 +208,9 @@ VirtualHost "jappix.com"
     resources_limit = 10
 
     no_registration_whitelist = true
-    registration_url = "https://jappix.com/"
-    registration_text = "Please register your account on Jappix itself (open Jappix.com in your Web browser). Then you'll be able to use it anywhere you want."
+
+    --registration_url = "https://jappix.com/"
+    --registration_text = "Please register your account on Jappix itself (open Jappix.com in your Web browser). Then you'll be able to use it anywhere you want."
 
     public_service_vcard = {
         name = "Jappix XMPP service",
@@ -292,11 +293,6 @@ Component "stats.jappix.com" "http"
     server_status_basepath = "/xmppd/"
     server_status_show_hosts = { "jappix.com", "anonymous.jappix.com" }
     server_status_show_comps = { "muc.jappix.com", "proxy.jappix.com", "pubsub.jappix.com", "vjud.jappix.com" }
-
----Set up an API service
--- Important: uses modules from https://github.com/jappix/jappix-xmppd-modules
-Component "api.jappix.com" "http"
-    modules_enabled = { "api_user", "api_muc" }
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 Component "proxy.jappix.com" "proxy65"
